@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"mahirocd/runtime"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -24,6 +25,7 @@ type GithubWebhook struct {
 }
 
 func main() {
+	runtime.NewRuntime("test", "/", []string{"echo", "hello"}).ProcessAsync()
 
 	app := fiber.New()
 	app.Use(recover.New())
