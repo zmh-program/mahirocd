@@ -1,9 +1,8 @@
 package runtime
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
+	"mahirocd/utils"
 )
 
 type Runtime struct {
@@ -29,9 +28,7 @@ func (r *Runtime) GetCommand() []string {
 }
 
 func (r *Runtime) GetHash() string {
-	hash := md5.New()
-	hash.Write([]byte(r.Name))
-	return hex.EncodeToString(hash.Sum(nil))
+	return utils.Md5Encode(r.Name)
 }
 
 func (r *Runtime) GetPath() string {
@@ -42,7 +39,7 @@ func (r *Runtime) Exec() string {
 	shell := NewShell(r.Path, r.Command)
 	response, err := shell.Run()
 	if err != nil {
-		return fmt.Sprintf("runtime error occurred: %s", err.Error())
+		return fmt.Sprintf("%s\nruntime error occurred: %s", response, err)
 	} else {
 		return response
 	}
