@@ -1,4 +1,4 @@
-package main
+package workflow
 
 import (
 	"fmt"
@@ -9,22 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 )
-
-type Workflow struct {
-	Name  string `json:"name"`
-	Repo  string `json:"repo"`
-	Path  string `json:"path"`
-	Steps []Step `json:"steps"`
-}
-
-type Step struct {
-	Name string `json:"name"`
-	Run  string `json:"run"`
-}
-
-type Manager struct {
-	Workflows map[string]Workflow
-}
 
 func GetWorkflowConfig() []string {
 	list, err := os.ReadDir("workflows")
@@ -93,58 +77,4 @@ func (w *Workflow) GetCommands() []string {
 func (w *Workflow) RunAsync() {
 	instance := runtime.NewRuntime(w.Repo, w.Path, w.GetCommands())
 	instance.ProcessAsync()
-}
-
-func (m *Manager) Load() {
-	config := GetWorkflowConfig()
-	m.Workflows = make(map[string]Workflow)
-	for _, path := range config {
-		workflow := ReadWorkflow(path)
-		if workflow != nil {
-			m.Workflows[workflow.Name] = *workflow
-		}
-	}
-}
-
-func (m *Manager) Get(name string) *Workflow {
-	if workflow, ok := m.Workflows[name]; ok {
-		return &workflow
-	}
-	return nil
-}
-
-func (m *Manager) List() []Workflow {
-	list := make([]Workflow, 0)
-	for _, workflow := range m.Workflows {
-		list = append(list, workflow)
-	}
-	return list
-}
-
-func (m *Manager) Add(workflow Workflow) {
-	m.Workflows[workflow.Name] = workflow
-}
-
-func (m *Manager) Remove(name string) {
-	delete(m.Workflows, name)
-}
-
-func (m *Manager) Refresh() {
-	m.Load()
-}
-
-func NewManager() Manager {
-	manager := Manager{}
-	manager.Load()
-	return manager
-}
-
-func (m *Manager) RunAsync(name string) bool {
-	workflow := m.Get(name)
-	if workflow == nil {
-		return false
-	}
-
-	workflow.RunAsync()
-	return true
 }

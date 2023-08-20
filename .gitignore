@@ -1,6 +1,5 @@
 .idea
 *.exe
 mahirocd
-logs
 workflows/*
 !workflows/.gitkeep

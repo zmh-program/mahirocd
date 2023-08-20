@@ -13,12 +13,6 @@ func Md5Encode(str string) string {
 	return hex.EncodeToString(hash.Sum(nil))
 }
 
-func Sha2Encode(str string) string {
-	hash := md5.New()
-	hash.Write([]byte(str))
-	return hex.EncodeToString(hash.Sum(nil))
-}
-
 func GetCommandSeparator() string {
 	system := runtime.GOOS
 
