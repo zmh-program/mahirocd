@@ -37,12 +37,8 @@ func (r *Runtime) GetPath() string {
 
 func (r *Runtime) Exec() string {
 	shell := NewShell(r.Path, r.Command)
-	response, err := shell.Run()
-	if err != nil {
-		return fmt.Sprintf("%s\nruntime error occurred: %s", response, err)
-	} else {
-		return response
-	}
+
+	return shell.Run()
 }
 
 func (r *Runtime) ExecWithLog() (string, error) {

@@ -1,9 +1,8 @@
 package runtime
 
 import (
-	"log"
 	"os/exec"
-	"strings"
+	"runtime"
 )
 
 type Shell struct {
@@ -20,39 +19,43 @@ func NewShell(path string, commands []string) *Shell {
 	}
 }
 
-func (s *Shell) run() (response string, err error) {
+func (s *Shell) run() string {
 	buffer := NewBuffer()
 
+	cwd := s.Path
 	for _, command := range s.Commands {
 		buffer.PushCommand(command)
 
-		cmd := exec.Command(strings.Split(command, " ")[0], strings.Split(command, " ")[1:]...)
+		var cmd *exec.Cmd
+		if runtime.GOOS == "windows" {
+			cmd = exec.Command("cmd", "/C", command)
+		} else {
+			cmd = exec.Command("sh", "-c", command)
+		}
+		cmd.Dir = cwd
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			buffer.PushError(err)
 			buffer.PushExitCode(cmd.ProcessState.ExitCode())
-			return buffer.StringAll(), err
+			return buffer.StringAll()
+		} else {
+			cwd = cmd.Dir
 		}
 		buffer.PushOutput(output)
 	}
 
-	return buffer.StringAll(), nil
+	return buffer.StringAll()
 }
 
-func (s *Shell) Run() (response string, err error) {
+func (s *Shell) Run() string {
 	s.Quit = false
-	response, err = s.run()
+	response := s.run()
 	s.Quit = true
-	return response, err
+	return response
 }
 
 func (s *Shell) RunAsync() {
-	go func() {
-		_, err := s.Run()
-		if err != nil {
-			log.Println(err)
-		}
-	}()
+	go s.Run()
 }
 
 func (s *Shell) IsRunning() bool {
