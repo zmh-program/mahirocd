@@ -25,5 +25,6 @@ func main() {
 		app.Get("/connection", websocket.New(ConnectionHandler))
 	}
 
+	manager.Exec()
 	log.Fatal(app.Listen(":" + viper.GetString("port")))
 }

@@ -53,3 +53,7 @@ func (m *Manager) RunAsync(name string) bool {
 	workflow.RunAsync()
 	return true
 }
+
+func (m *Manager) HandleMessage(message []byte) {
+	m.RunAsync(string(message))
+}

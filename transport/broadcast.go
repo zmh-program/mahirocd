@@ -1,6 +1,9 @@
 package main
 
-import "github.com/gofiber/websocket/v2"
+import (
+	"fmt"
+	"github.com/gofiber/websocket/v2"
+)
 
 type BroadcastManager struct {
 	connections []*websocket.Conn
@@ -9,13 +12,14 @@ type BroadcastManager struct {
 
 func NewBroadcastManager() *BroadcastManager {
 	return &BroadcastManager{
-		connections: make([]*websocket.Conn, 0),
-		channel:     make(chan []byte),
+		connections: make([]*websocket.Conn, 0x0),
+		channel:     make(chan []byte, 0xe),
 	}
 }
 
 func (b *BroadcastManager) AddConnection(conn *websocket.Conn) {
 	b.connections = append(b.connections, conn)
+	fmt.Println(fmt.Sprintf("New connection added from %s. Current connections: %d", conn.RemoteAddr().String(), b.Len()))
 }
 
 func (b *BroadcastManager) RemoveConnection(conn *websocket.Conn) {
@@ -25,6 +29,7 @@ func (b *BroadcastManager) RemoveConnection(conn *websocket.Conn) {
 			break
 		}
 	}
+	fmt.Println(fmt.Sprintf("Connection removed from %s. Current connections: %d", conn.RemoteAddr().String(), b.Len()))
 }
 
 func (b *BroadcastManager) Broadcast() {

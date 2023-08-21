@@ -1,17 +1,24 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/recover"
+	"fmt"
+	"github.com/spf13/viper"
+	"log"
+	"mahirocd/utils"
 	"mahirocd/workflow"
 )
 
-var manager workflow.Manager
-
 func main() {
-	app := fiber.New()
-	app.Use(recover.New())
+	viper.SetConfigFile("config.yaml")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalln(err)
+	}
 
-	manager = workflow.NewManager()
+	manager := workflow.NewManager()
 
+	conn := utils.NewConnection(
+		fmt.Sprintf("%s/connection", viper.GetString("endpoint")),
+		manager.HandleMessage,
+	)
+	conn.ExecWithBlock()
 }
