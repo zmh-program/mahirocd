@@ -68,6 +68,7 @@ func GetCommand(data string) string {
 
 func (w *Workflow) GetCommands() []string {
 	commands := make([]string, 0)
+	commands = append(commands, "git pull")
 	for _, step := range w.Steps {
 		commands = append(commands, GetCommand(step.Run))
 	}
