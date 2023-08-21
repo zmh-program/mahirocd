@@ -11,10 +11,10 @@ Mahiro lightweight CI/CD server automation deployment tool
 </div>
 
 ### 介绍 Introduction
-Mahiro CD 是一个轻量级子托管CI/CD工具，用于在多服务器中进行自动构建和部署。
+Mahiro CD 是一个轻量级自托管CI/CD工具，用于在多服务器中进行自动构建和部署。
 类似于 Jenkins，但是更加轻量级，更加适合多服务器的自动部署。不暴露服务器的端口，更加安全。
 
-Mahiro CD is a lightweight sub-hosted CI/CD tool for automatic building and deployment in multiple servers.
+Mahiro CD is a lightweight self-hosted CI/CD tool for automatic building and deployment in multiple servers.
 Similar to Jenkins, but more lightweight and more suitable for automatic deployment of multiple servers. Do not expose the port of the server, more secure.
 
 ### 架构 Architecture
@@ -70,20 +70,27 @@ endpoint: ws://localhost:306 # master node address
 The configuration is similar to **GitHub Actions**. Create any file name in the **.flow** folder, with the suffix *.yaml* or *.yml* to create a task, select a repository, fill in the build script, click build, and you can complete the automatic build and deployment.
 
 e.g.
-```yaml
-name: mahirocd  # task name
-repo: "zmh-program/mahirocd"  # repository
-path: "/www/wwwroot/mahirocd"  # working directory
-steps:
-  - name: "build frontend"  # step name
-    run: | # script
-      pnpm install
-      pnpm build
+1. 新建任务 new task
+    ```yaml
+    name: mahirocd  # task name
+    repo: "zmh-program/mahirocd"  # repository
+    path: "/www/wwwroot/mahirocd"  # working directory
+    steps:
+      - name: "build frontend"  # step name
+        run: | # script
+          pnpm install
+          pnpm build
+    
+      - name: "build backend"
+        run: go build .
+    
+    ```
+2. webhook
+    
+    > _http(s)://**example.com**/events_
 
-  - name: "build backend"
-    run: go build .
+   ![webhook](/docs/webhook.png)
 
-```
 
 ### 日志 Log
 日志文件存储在 `logs` 文件夹下，以任务名的hash命名。
