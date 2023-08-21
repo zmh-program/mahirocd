@@ -66,6 +66,12 @@ func (c *Connection) Run() {
 	go func() {
 		for !c.closed {
 			_, message := c.ReadMessage()
+			if len(message) == 0 {
+				if c.closed {
+					return
+				}
+				continue
+			}
 			c.callback(message)
 		}
 	}()

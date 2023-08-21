@@ -20,8 +20,11 @@ func NewShell(path string, commands []string) *Shell {
 }
 
 func (s *Shell) run() string {
-	buffer := NewBuffer()
+	if len(s.Commands) == 0 {
+		return ""
+	}
 
+	buffer := NewBuffer()
 	cwd := s.Path
 	for _, command := range s.Commands {
 		buffer.PushCommand(command)

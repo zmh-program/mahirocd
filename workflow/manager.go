@@ -1,5 +1,10 @@
 package workflow
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 func (m *Manager) Load() {
 	config := GetWorkflowConfig()
 	m.Workflows = make(map[string]Workflow)
@@ -50,10 +55,18 @@ func (m *Manager) RunAsync(name string) bool {
 		return false
 	}
 
+	fmt.Println("Trigger event for workflow:", workflow.Name)
 	workflow.RunAsync()
 	return true
 }
 
 func (m *Manager) HandleMessage(message []byte) {
-	m.RunAsync(string(message))
+	var hook GithubWebhook
+
+	if err := json.Unmarshal(message, &hook); err != nil {
+		fmt.Println("Occurred error when unmarshal message:", string(message))
+		return
+	}
+
+	m.RunAsync(hook.Repository.Name)
 }
