@@ -65,11 +65,11 @@ endpoint: ws://localhost:306 # master node address
 ```
 
 ### 使用 Usage
-配置类似于 **GitHub Actions**。在**workflows**文件夹下新建任意文件名，后缀为*.yaml*或*.yml*即新建一个任务，选择一个仓库，填写构建脚本，点击构建，即可完成自动构建和部署。
+配置类似于 **GitHub Actions**。在**.flow**文件夹下新建任意文件名，后缀为 *.yaml* 或 *.yml* 即新建一个任务，选择一个仓库，填写构建脚本，点击构建，即可完成自动构建和部署。
 
-The configuration is similar to **GitHub Actions**. Create any file name in the **workflows** folder, with the suffix *.yaml* or *.yml* to create a task, select a repository, fill in the build script, click build, and you can complete the automatic build and deployment.
+The configuration is similar to **GitHub Actions**. Create any file name in the **.flow** folder, with the suffix *.yaml* or *.yml* to create a task, select a repository, fill in the build script, click build, and you can complete the automatic build and deployment.
 
-示例:
+e.g.
 ```yaml
 name: mahirocd  # task name
 repo: "zmh-program/mahirocd"  # repository
@@ -91,4 +91,7 @@ steps:
 The log file is stored in the `logs` folder and named after the hash of the task name.
 
 ### 开源协议 License
-MIT
+MIT License
+
+### 贡献 Contributing
+![contributions](https://stats.deeptrain.net/contributor/zmh-program/mahirocd)

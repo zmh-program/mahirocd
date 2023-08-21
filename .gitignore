@@ -1,5 +1,5 @@
 .idea
 *.exe
 mahirocd
-workflows/*
-!workflows/.gitkeep
+.flow/*
+!.flow/.gitkeep

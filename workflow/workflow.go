@@ -11,7 +11,7 @@ import (
 )
 
 func GetWorkflowConfig() []string {
-	list, err := os.ReadDir("workflows")
+	list, err := os.ReadDir(".flow")
 	if err != nil {
 		panic(err)
 	}
@@ -20,7 +20,7 @@ func GetWorkflowConfig() []string {
 	for _, item := range list {
 		ext := filepath.Ext(item.Name())
 		if !item.IsDir() && (ext == ".yml" || ext == ".yaml") {
-			config = append(config, fmt.Sprintf("workflows/%s", item.Name()))
+			config = append(config, fmt.Sprintf(".flow/%s", item.Name()))
 		}
 	}
 
@@ -42,7 +42,7 @@ func ReadWorkflow(path string) *Workflow {
 }
 
 func (w *Workflow) Save() {
-	file, err := os.Create(fmt.Sprintf("workflows/%s.yml", w.Name))
+	file, err := os.Create(fmt.Sprintf(".flow/%s.yml", w.Name))
 	if err != nil {
 		panic(err)
 	}

@@ -28,11 +28,11 @@ func AppendFile(path, content string) error {
 }
 
 func WriteLog(hash string, content string) error {
-	if _, err := os.Stat("workflows/logs"); os.IsNotExist(err) {
+	if _, err := os.Stat(".flow/logs"); os.IsNotExist(err) {
 		// create logs directory
-		if err := os.Mkdir("workflows/logs", 0755); err != nil {
+		if err := os.Mkdir(".flow/logs", 0755); err != nil {
 			return err
 		}
 	}
-	return AppendFile(fmt.Sprintf("workflows/logs/%s.log", hash), content)
+	return AppendFile(fmt.Sprintf(".flow/logs/%s.log", hash), content)
 }
